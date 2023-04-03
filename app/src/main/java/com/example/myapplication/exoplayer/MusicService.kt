@@ -18,7 +18,10 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
+
 import com.google.android.exoplayer2.upstream.DefaultDataSource
+import dagger.Binds
+import dagger.Provides
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -29,8 +32,10 @@ private const val SERVICE_TAG = "MusicService"
 class MusicService: MediaBrowserServiceCompat() {
     @Inject
     lateinit var dataSourceFactory: DefaultDataSource.Factory
+
     @Inject
     lateinit var exoPlayer: ExoPlayer
+
     @Inject
     lateinit var firebaseMusicSource: FirebaseMusicSource
 
@@ -38,17 +43,17 @@ class MusicService: MediaBrowserServiceCompat() {
     private lateinit var musicNotificationManager: MusicNotificationManager
 
     private val serviceJob = Job()
-    private val serviceScope = CoroutineScope(Dispatchers.Default + serviceJob)
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private lateinit var mediaSession : MediaSessionCompat
     private lateinit var mediaSessionConnector : MediaSessionConnector
 
     var isForegroundService = false
-    private var curPlayingSong: MediaMetadataCompat? = null
+    private var currentPlayingSong: MediaMetadataCompat? = null
     private var isPlayerInitialized = false
     private lateinit var musicPlayerEventListener: MusicPlayerEventListener
 
 companion object {
-    var curSongDuration = 0L
+    var currentSongDuration = 0L
     private set
 }
     override fun onCreate() {
@@ -57,10 +62,9 @@ companion object {
             firebaseMusicSource.fetchMediaData()
         }
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let{
-//
-        //
-        //
-                    PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
+
+                            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
+
         }
             mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
                setSessionActivity(activityIntent)
@@ -73,10 +77,10 @@ companion object {
         mediaSession.sessionToken,
         MusicPlayerNotificationListener(this)
         ){
-            curSongDuration = exoPlayer.duration
+            currentSongDuration = exoPlayer.duration
         }
             val musicPlaybackPreparer = MusicPlaybackPreparer(firebaseMusicSource){
-                curPlayingSong = it
+                currentPlayingSong = it
                 preparePlayer(
                     firebaseMusicSource.songs,
                     it,
@@ -94,7 +98,7 @@ companion object {
 
         musicPlayerEventListener = MusicPlayerEventListener(this)
         exoPlayer.addListener(musicPlayerEventListener)
-        musicNotificationManager.showNotfication(exoPlayer)
+        musicNotificationManager.showNotification(exoPlayer)
     }
     private inner class MusicQueueNavigator : TimelineQueueNavigator(mediaSession){
         override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
@@ -106,7 +110,7 @@ companion object {
         itemToPlay: MediaMetadataCompat?,
         playNow: Boolean
     ){
-        val curSongIndex = if(curPlayingSong == null) 0 else songs.indexOf(itemToPlay)
+        val curSongIndex = if(currentPlayingSong == null) 0 else songs.indexOf(itemToPlay)
         exoPlayer.setMediaSource(firebaseMusicSource.asMediaSource(dataSourceFactory))
         exoPlayer.prepare()
         exoPlayer.seekTo(curSongIndex, 0L)

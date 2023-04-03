@@ -15,41 +15,43 @@ import com.example.myapplication.other.Constants.NOTIFICATION_ID
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 
-class MusicNotificationManager (
+
+class MusicNotificationManager(
     private val context: Context,
     sessionToken: MediaSessionCompat.Token,
-    notificationListener : PlayerNotificationManager.NotificationListener,
-    private val newSongCallback : () -> Unit
-    )
-{
+    notificationListener: PlayerNotificationManager.NotificationListener,
+    private val newSongCallback: () -> Unit
+) {
+
     private val notificationManager: PlayerNotificationManager
 
     init {
-        val mediaController = MediaControllerCompat(context,sessionToken)
-        notificationManager = PlayerNotificationManager.Builder(
-            context ,
-            NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
-            .setChannelNameResourceId(R.string.notification_channel_name)
-            .setChannelDescriptionResourceId(R.string.notification_channel_description)
-            .setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
-            .setNotificationListener(notificationListener)
-            .build()
-            .apply {
-                setSmallIcon(R.drawable.ic_music)
-                setMediaSessionToken(sessionToken)
-
-            }
-
+        val mediaController = MediaControllerCompat(context, sessionToken)
+        val builder =
+            PlayerNotificationManager.Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID )
+        with(builder) {
+            setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
+            setNotificationListener(notificationListener)
+            setChannelNameResourceId(R.string.notification_channel)
+            setChannelDescriptionResourceId(R.string.notification_channel_description)
+        }
+        notificationManager = builder.build()
+        notificationManager.setSmallIcon(R.drawable.ic_music)
+        notificationManager.setMediaSessionToken(sessionToken)
+        notificationManager.setUseRewindAction(false)
+        notificationManager.setUseFastForwardAction(false)
     }
-    fun showNotfication(player: Player){
+
+    fun showNotification(player: Player) {
         notificationManager.setPlayer(player)
     }
 
     private inner class DescriptionAdapter(
         private val mediaController: MediaControllerCompat
+    ) : PlayerNotificationManager.MediaDescriptionAdapter {
 
-    ): PlayerNotificationManager.MediaDescriptionAdapter {
         override fun getCurrentContentTitle(player: Player): CharSequence {
+            newSongCallback()
             return mediaController.metadata.description.title.toString()
         }
 
@@ -67,12 +69,12 @@ class MusicNotificationManager (
         ): Bitmap? {
             Glide.with(context).asBitmap()
                 .load(mediaController.metadata.description.iconUri)
-                .into(object: CustomTarget<Bitmap>() {
+                .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
                         transition: Transition<in Bitmap>?
                     ) {
-                            callback.onBitmap(resource)
+                        callback.onBitmap(resource)
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) = Unit

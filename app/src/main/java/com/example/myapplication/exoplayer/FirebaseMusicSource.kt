@@ -11,21 +11,23 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
 class FirebaseMusicSource @Inject constructor(
     private val musicDatabase: MusicDatabase
 ) {
 
-
     var songs = emptyList<MediaMetadataCompat>()
-    suspend fun fetchMediaData() = withContext(Dispatchers.Main){
-state = State.STATE_INITIALIZING
+//suspend
+    suspend fun fetchMediaData() = withContext(Dispatchers.Main) {
+        state = State.STATE_INITIALIZING
         val allSongs = musicDatabase.getAllSongs()
-        songs = allSongs.map {song ->
+        songs = allSongs.map { song ->
             MediaMetadataCompat.Builder()
                 .putString(METADATA_KEY_ARTIST, song.subtitle)
                 .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
@@ -40,31 +42,28 @@ state = State.STATE_INITIALIZING
         }
         state = State.STATE_INITIALIZED
     }
+
     fun asMediaSource(dataSourceFactory: DefaultDataSource.Factory): ConcatenatingMediaSource {
-        val concatenatingMediaSource =ConcatenatingMediaSource()
-        songs.forEach{song ->
+        val concatenatingMediaSource = ConcatenatingMediaSource()
+        songs.forEach { song ->
+            val source = song.getString(METADATA_KEY_MEDIA_URI).toUri()
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(
-                    MediaItem.fromUri(
-                        song.getString(METADATA_KEY_MEDIA_URI).toUri()
-//                                song.getString(METADATA_KEY_MEDIA_URI)
-                    )
-                )
+                .createMediaSource(MediaItem.fromUri(source))
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource
     }
-fun asMediaItems() = songs.map {
-    song -> val desc = MediaDescriptionCompat.Builder()
-    .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
-    .setTitle(song.description.title)
-    .setSubtitle(song.description.subtitle)
-    .setMediaId(song.description.mediaId)
-    .setIconUri(song.description.iconUri)
-    .build()
-    MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)
-}.toMutableList()
 
+    fun asMediaItems() = songs.map { song ->
+        val desc = MediaDescriptionCompat.Builder()
+            .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+            .setTitle(song.description.title)
+            .setSubtitle(song.description.subtitle)
+            .setMediaId(song.description.mediaId)
+            .setIconUri(song.description.iconUri)
+            .build()
+        MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)
+    }.toMutableList()
 
     private val onReadyListeners = mutableListOf<(Boolean) -> Unit>()
 
@@ -91,13 +90,13 @@ fun asMediaItems() = songs.map {
             return true
         }
     }
-
-
-
 }
+
 enum class State {
     STATE_CREATED,
     STATE_INITIALIZING,
     STATE_INITIALIZED,
     STATE_ERROR
 }
+
+

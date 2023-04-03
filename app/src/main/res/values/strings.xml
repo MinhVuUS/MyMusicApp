@@ -3,4 +3,7 @@
     <string name="notification_channel_name">Music Channel</string>
     <string name="notification_channel_description">Shows the currently playing music</string>
     <string name="play_pause_button">play / pause button</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notification_channel">Now Playing</string>
 </resources>
