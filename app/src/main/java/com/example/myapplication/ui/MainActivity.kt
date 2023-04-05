@@ -28,8 +28,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
+//BaseActivity(R.layout.activity_main)
 //class MainActivity @Inject constructor() : AppCompatActivity()
-class MainActivity @Inject constructor(): AppCompatActivity() {
+class MainActivity @Inject constructor(): AppCompatActivity()  {
 
 
 //    private val viewModel by viewModels<MainViewModel>()

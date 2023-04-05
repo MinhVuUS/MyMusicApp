@@ -12,5 +12,31 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+
+    </style>
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardBackgroundColor">?attr/colorPrimaryDark</item>
+    </style>
+    <style name="SearchViewStyle" parent="Theme.MaterialComponents.DayNight">
+        <item name="searchHintIcon">@null</item>
+        <item name="searchIcon">@drawable/ic_search_white</item>
+        <item name="closeIcon">@drawable/ic_close_white</item>
+    </style>
+    <style name="AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textSize">@dimen/generic_text_size</item>
+        <item name="android:paddingLeft">@dimen/search_view_start_padding</item>
+        <item name="android:paddingTop">@dimen/search_view_top_padding</item>
+    </style>
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="navigationIcon">@drawable/ic_back_black</item>
+        <item name="android:background">@color/white_transparent_90p</item>
+        <item name="titleTextAppearance">@style/ToolbarTextStyle</item>
+        <item name="subtitleTextAppearance">@style/ToolbarSubTitleStyle</item>
+    </style>
+    <style name="ToolbarStyle.Collapsing" parent="Widget.MaterialComponents.Toolbar">
+        <item name="navigationIcon">@drawable/ic_back_black</item>
     </style>
 </resources>

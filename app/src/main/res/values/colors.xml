@@ -13,4 +13,11 @@
     <color name="mediumDarkBackground">#303030</color>
     <color name="darkBackground">#202020</color>
     <color name="lightBackground">#404040</color>
+    <color name="black_transparent_90p">#E6000000</color>
+    <color name="white_transparent_90p">#E6FFFFFF</color>
+    <color name="black_transparent_50p">#80000000</color>
+    <color name="white_transparent_50p">#80FFFFFF</color>
+    <color name="black_transparent_15p">#26000000</color>
+    <color name="white_transparent_15p">#26FFFFFF</color>
+    <color name="placeholder_color">#41007BFF</color>
 </resources>
