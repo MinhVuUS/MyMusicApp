@@ -19,26 +19,62 @@
     <action android:id="@+id/globalActionToSongFragment"
         app:destination="@id/songFragment"
         />
+
+
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/fragmentSearch"
         android:name="com.example.myapplication.ui.fragments.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_albumsFragment"
-            app:destination="@id/albumsFragment" />
+            app:destination="@id/fragmentAlbums" />
     </fragment>
+
     <fragment
-        android:id="@+id/albumsFragment"
+        android:id="@+id/fragmentAlbums"
         android:name="com.example.myapplication.ui.fragments.albums.AlbumsFragment"
         android:label="fragment_albums"
         tools:layout="@layout/fragment_albums" >
         <action
-            android:id="@+id/action_albumsFragment_to_tracksFragment"
-            app:destination="@id/tracksFragment" />
+            android:id="@+id/action_fragmentAlbums_to_fragmentTracks"
+            app:destination="@id/fragmentTracks" />
+        <argument
+            android:name="artistId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+        <argument
+            android:name="artistName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
     </fragment>
+
     <fragment
-        android:id="@+id/tracksFragment"
+        android:id="@+id/fragmentTracks"
         android:name="com.example.myapplication.ui.fragments.tracks.TracksFragment"
-        android:label="TracksFragment" />
+        android:label="Tracks"
+        tools:layout="@layout/fragment_tracks">
+        <argument
+            android:name="albumId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+        <argument
+            android:name="albumName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+        <argument
+            android:name="artistName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+        <argument
+            android:name="cover"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+    </fragment>
 </navigation>
