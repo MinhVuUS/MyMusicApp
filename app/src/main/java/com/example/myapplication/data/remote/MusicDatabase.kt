@@ -5,6 +5,8 @@ import com.example.myapplication.data.entities.Song
 import com.example.myapplication.other.Constants.SONG_COLLECTION
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
+
 private const val TAG = "MusicDatabase"
 class MusicDatabase {
 
@@ -16,7 +18,7 @@ suspend fun getAllSongs(): List<Song> {
             songCollection.get().await().toObjects(Song::class.java)
 
         } catch (e: Exception) {
-            Log.e(TAG,"Could not retrieve song list")
+            Timber.tag(TAG).e("Could not retrieve song list")
             e.printStackTrace()
             emptyList()
         }

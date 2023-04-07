@@ -1,12 +1,14 @@
 package com.example.myapplication.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.adapters.SongAdapter
@@ -38,6 +40,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         setupRecyclerView()
         subscribeToObservers()
@@ -45,6 +48,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         songadapter.setOnItemClickListener {
             viewModel.playOrToggleSong(it)
         }
+//        binding.imageButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_fragmentSearch)
+//        }
+        menuHost.addMenuProvider(object :MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu,menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+               return when (menuItem.itemId) {
+                   R.id.menu_item_search -> {
+                       val controller = findNavController()
+               controller.navigate(R.id.action_homeFragment_to_fragmentSearch)
+                   true
+                   }
+                   else -> false
+               }
+            }
+        },viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+
 
     }
 
@@ -68,9 +92,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Status.LOADING -> binding.allSongsProgressBar.isVisible = true
             }
         }
-    }
-
-}
+    }}
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when(item.itemId)
+//        {
+//            R.id.menu_item_search -> {
+//                val controller = findNavController()
+//                controller.navigate(R.id.action_homeFragment_to_fragmentSearch)
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
+//}
 
 //
 //@AndroidEntryPoint

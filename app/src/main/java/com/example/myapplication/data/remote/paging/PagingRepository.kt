@@ -2,6 +2,7 @@
 package com.example.myapplication.data.remote.paging
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.example.myapplication.data.models.ResponseData
 import com.example.myapplication.data.models.album.Album
 import com.example.myapplication.data.models.artist.Artist
@@ -10,7 +11,7 @@ import com.example.myapplication.data.remote.paging.PagingDataSource
 import com.example.myapplication.data.services.ServiceType
 import retrofit2.HttpException
 import java.io.IOException
- abstract class PagingRepository(
+class PagingRepository(
     private val query: String,
     private val serviceType: ServiceType,
     private val pagingDataSource: PagingDataSource
@@ -84,5 +85,11 @@ import java.io.IOException
 //        inMemoryCache.clear()
 //        queryCache.clear()
 //    }
-}
 
+    override fun getRefreshKey(state: PagingState<Int, ResponseData>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+    }
+}
+}

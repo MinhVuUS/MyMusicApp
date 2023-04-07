@@ -8,6 +8,7 @@ package com.example.myapplication.ui.fragments.search
 
 import androidx.lifecycle.*
 import androidx.paging.PagingData
+import androidx.paging.TerminalSeparatorType
 import androidx.paging.cachedIn
 import androidx.paging.insertHeaderItem
 import com.example.myapplication.data.remote.Repository
@@ -38,10 +39,16 @@ class SearchViewModel @Inject constructor(
             return lastResult
         }
         currentQueryValue = queryString
+       // val headerItem = ResponseData(queryString, Artist())
         val newResult: Flow<PagingData<ResponseData>> =
             repository.fetch(queryString, ServiceType.Artists).map {
                 it.insertHeaderItem(
-                    ResponseData(queryString, Artist())
+                    TerminalSeparatorType.SOURCE_COMPLETE,
+                    ResponseData(queryString,Artist())
+//                   ResponseData(queryString,Artist())
+                    //headerItem
+                   // ResponseData(queryString, Artist())
+
                 )
             }.cachedIn(viewModelScope)
         currentSearchResult = newResult

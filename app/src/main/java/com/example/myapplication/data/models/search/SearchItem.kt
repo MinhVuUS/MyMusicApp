@@ -9,7 +9,8 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.example.myapplication.data.models.album.Album
 import com.example.myapplication.data.models.artist.Artist
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
 
 /**
  * General Search Response Model

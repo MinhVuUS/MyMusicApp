@@ -77,7 +77,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     //paging
     //implementation 'androidx.paging:paging-common-ktx:3.1.1'
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha10'
+    implementation 'androidx.paging:paging-runtime-ktx:3.2.0-alpha04'
     //navigation
     def nav_version ="2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

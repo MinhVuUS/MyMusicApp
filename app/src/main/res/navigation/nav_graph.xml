@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.myapplication.ui.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_fragmentSearch"
+            app:destination="@id/fragmentSearch" />
+    </fragment>
     <fragment
         android:id="@+id/songFragment"
         android:name="com.example.myapplication.ui.fragments.SongFragment"
@@ -24,17 +28,17 @@
     <fragment
         android:id="@+id/fragmentSearch"
         android:name="com.example.myapplication.ui.fragments.search.SearchFragment"
-        android:label="fragment_search"
+        android:label="Search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_albumsFragment"
+            android:id="@+id/action_fragmentSearch_to_fragmentAlbums"
             app:destination="@id/fragmentAlbums" />
     </fragment>
 
     <fragment
         android:id="@+id/fragmentAlbums"
         android:name="com.example.myapplication.ui.fragments.albums.AlbumsFragment"
-        android:label="fragment_albums"
+        android:label="Albums"
         tools:layout="@layout/fragment_albums" >
         <action
             android:id="@+id/action_fragmentAlbums_to_fragmentTracks"
